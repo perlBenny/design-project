@@ -1,0 +1,25 @@
+node_modules/
+dist/
+build/
+.output/
+.vinxi/
+.tanstack/
+coverage/
+*.log
+
+# Env files (only .env.example is committed)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+.venv/
+
+# Go
+/backends/go/bin/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
