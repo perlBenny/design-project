@@ -1,8 +1,27 @@
 {
   "name": "design-project",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
-  "scripts": {}
+  "scripts": {
+    "infra:up": "docker compose --env-file .env.dev up -d --wait",
+    "infra:down": "docker compose --env-file .env.dev down",
+    "infra:logs": "docker compose --env-file .env.dev logs -f",
+    "dev": "pnpm infra:up && pnpm -r --parallel --if-present dev",
+    "build": "pnpm -r --if-present build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "oxlint --no-error-on-unmatched-pattern",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck"
+  },
+  "devDependencies": {
+    "oxlint": "^1.92.0",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2"
+  }
 }
