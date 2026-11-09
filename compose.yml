@@ -60,6 +60,49 @@ services:
         $$S3 put-bucket-policy --bucket "$$S3_BUCKET" --policy "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::$$S3_BUCKET/*\"]}]}"
         echo "bucket $$S3_BUCKET ready"
 
+  # ---------- Tools: run on demand only (profile "tools"), never by `up` ----------
+
+  # Runs SQL migrations from db/migrations. Usage: pnpm db:migrate / db:rollback / db:new <name>
+  dbmate:
+    image: ghcr.io/amacneil/dbmate:2.38
+    profiles: [tools]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-designer_dev}?sslmode=disable
+      DBMATE_MIGRATIONS_DIR: /db/migrations
+      DBMATE_SCHEMA_FILE: /db/schema.sql
+    volumes:
+      - ./db:/db
+
+  # Loads db/seed/base.sql (always) and db/seed/dev.sql (when SEED_SAMPLE_DATA=true).
+  seed:
+    image: postgres:18-alpine
+    profiles: [tools]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-designer_dev}
+      SEED_SAMPLE_DATA: ${SEED_SAMPLE_DATA:-false}
+    volumes:
+      - ./db/seed:/seed:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        # -1 = one transaction per file: a failure leaves nothing half-done
+        psql -v ON_ERROR_STOP=1 -q -1 -f /seed/base.sql
+        echo "base seed done"
+        if [ "$$SEED_SAMPLE_DATA" = "true" ]; then
+          psql -v ON_ERROR_STOP=1 -q -1 -f /seed/dev.sql
+          echo "sample data done"
+        fi
+
 volumes:
   pgdata:
   storagedata:
