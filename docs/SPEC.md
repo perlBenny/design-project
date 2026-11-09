@@ -34,6 +34,11 @@ Lazy-loaded, `noindex`, blocked in `robots.txt`.
 
 Backends never change the schema. Prisma uses `db pull` only — never `prisma migrate`.
 
+- IDs are UUID v7 (`uuidv7()`, built into Postgres 18).
+- Images (projects, tip categories, tips) always store `storage_key`, `alt`, `width`, `height`.
+- Seed: `db/seed/base.sql` (roles, permissions) runs everywhere; `db/seed/dev.sql` (sample data) only when `SEED_SAMPLE_DATA=true`.
+- The admin user is not created by the SQL seed. The backend creates it from `ADMIN_EMAIL` / `ADMIN_PASSWORD` (task #6), so the password is hashed with the same argon2 code used at login. Dev uses fixed credentials from `.env.example`; prod uses a strong password from `.env.prod`, and the backend refuses to start in prod with the dev password.
+
 ## Architecture
 
 ```
@@ -55,7 +60,7 @@ Browser → TanStack Start (SSR) → REST /api/v1 → Fastify (Node) → Postgre
 
 ## Auth
 
-JWT (HS256) in httpOnly cookies. Access 15 min, refresh 7 days with rotation and reuse detection. Rate-limited login. Admin created by seed.
+JWT (HS256) in httpOnly cookies. Access 15 min, refresh 7 days with rotation and reuse detection. Rate-limited login. Admin created by a backend command (see Data model).
 
 ## Stack
 

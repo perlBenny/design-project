@@ -45,7 +45,8 @@ jobs:
       - name: Test
         run: pnpm test
 
-  # Infra: the dev Docker Compose stack starts and every service is healthy.
+  # Infra: the dev Docker Compose stack starts, every service is healthy,
+  # and the database migrations and seed work.
   infra:
     name: infra
     runs-on: ubuntu-latest
@@ -69,6 +70,33 @@ jobs:
           code=$(timeout 60 docker wait "$container")
           docker compose --env-file .env.dev logs --no-log-prefix storage-init
           [ "$code" = "0" ]
+
+      # ---------- Database ----------
+      - name: Migrations apply on an empty DB
+        run: docker compose --env-file .env.dev run --rm dbmate up
+
+      - name: db/schema.sql is up to date
+        run: |
+          # If this fails: run `pnpm db:migrate` locally and commit db/schema.sql
+          git diff --exit-code -I '^-- Dumped' db/schema.sql
+
+      - name: Every migration rolls back, then applies again
+        run: |
+          count=$(ls db/migrations/*.sql | wc -l)
+          for i in $(seq "$count"); do docker compose --env-file .env.dev run --rm dbmate rollback; done
+          docker compose --env-file .env.dev run --rm dbmate up
+          git diff --exit-code -I '^-- Dumped' db/schema.sql
+
+      - name: Seed runs twice without errors or duplicates
+        run: |
+          docker compose --env-file .env.dev run --rm seed
+          docker compose --env-file .env.dev run --rm seed
+          tips=$(docker compose --env-file .env.dev exec -T postgres psql -U designer -d designer_dev -tAc "select count(*) from tips")
+          echo "tips: $tips"
+          [ "$tips" = "9" ]
+
+      - name: DB rules reject bad data
+        run: docker compose --env-file .env.dev run --rm --entrypoint psql seed -q -f /tests/constraints.sql
 
       - name: Logs on failure
         if: failure()
