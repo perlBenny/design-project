@@ -390,6 +390,13 @@ CREATE INDEX refresh_tokens_family_id_idx ON public.refresh_tokens USING btree (
 
 
 --
+-- Name: refresh_tokens_replaced_by_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX refresh_tokens_replaced_by_idx ON public.refresh_tokens USING btree (replaced_by);
+
+
+--
 -- Name: refresh_tokens_user_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -530,4 +537,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20261109120000'),
     ('20261109120100'),
     ('20261109120200'),
-    ('20261109120300');
+    ('20261109120300'),
+    ('20261109162922');
