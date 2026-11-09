@@ -33,7 +33,8 @@
 
 ## AI files
 
-| File                                | Why                                      |
-| ----------------------------------- | ---------------------------------------- |
-| `.github/copilot-instructions.md`   | Project rules every AI agent reads first |
-| `.github/skills/docs-book/SKILL.md` | How to write and update this book        |
+| File                                | Why                                                                     |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| `.github/copilot-instructions.md`   | Project rules every AI agent reads first                                |
+| `.github/skills/docs-book/SKILL.md` | How to write and update this book                                       |
+| `.trove/shelf.json`                 | Expert books our AI reads first. See [AI knowledge](11-ai-knowledge.md) |
