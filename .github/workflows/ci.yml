@@ -64,9 +64,11 @@ jobs:
 
       - name: Bucket was created
         run: |
-          status=$(docker compose --env-file .env.dev ps -a storage-init --format '{{.State}} {{.ExitCode}}')
-          echo "storage-init: $status"
-          [ "$status" = "exited 0" ]
+          # storage-init is a one-time job; wait for it to finish, then check its exit code.
+          container=$(docker compose --env-file .env.dev ps -aq storage-init)
+          code=$(timeout 60 docker wait "$container")
+          docker compose --env-file .env.dev logs --no-log-prefix storage-init
+          [ "$code" = "0" ]
 
       - name: Logs on failure
         if: failure()
