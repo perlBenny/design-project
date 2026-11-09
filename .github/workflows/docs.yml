@@ -1,0 +1,46 @@
+name: Docs
+
+# Rule: a PR is not done until the book (docs/) is updated.
+# If a PR changes code but not docs/, this check fails.
+# Escape hatch: add the "no-docs" label when the change needs no book update.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Book updated with the code
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          NO_DOCS: ${{ contains(github.event.pull_request.labels.*.name, 'no-docs') }}
+        run: |
+          if [ "$NO_DOCS" = "true" ]; then
+            echo "Label no-docs is set, skipping."
+            exit 0
+          fi
+          changed=$(git diff --name-only "$BASE"...HEAD)
+          echo "$changed"
+          # Files that do not need a book update (lockfile, generated schema, the book itself).
+          code=$(echo "$changed" | grep -vE '^(docs/|pnpm-lock\.yaml$|db/schema\.sql$)' || true)
+          book=$(echo "$changed" | grep -E '^docs/' || true)
+          if [ -n "$code" ] && [ -z "$book" ]; then
+            echo "::error::This PR changes code but not docs/. Update the book (see .github/skills/docs-book/SKILL.md) or add the 'no-docs' label."
+            exit 1
+          fi
+          echo "OK"
