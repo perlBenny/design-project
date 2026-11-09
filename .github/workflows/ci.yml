@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to the same PR cancels the run that is still in progress.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Code quality: install, lint, format, typecheck, tests.
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      # pnpm version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+  # Infra: the dev Docker Compose stack starts and every service is healthy.
+  infra:
+    name: infra
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Create env file from example
+        run: cp .env.example .env.dev
+
+      - name: Start services
+        run: docker compose --env-file .env.dev up -d --wait
+
+      - name: Postgres accepts queries
+        run: docker compose --env-file .env.dev exec -T postgres psql -U designer -d designer_dev -c "select 1"
+
+      - name: Bucket was created
+        run: |
+          status=$(docker compose --env-file .env.dev ps -a storage-init --format '{{.State}} {{.ExitCode}}')
+          echo "storage-init: $status"
+          [ "$status" = "exited 0" ]
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose --env-file .env.dev logs
+
+      - name: Stop services
+        if: always()
+        run: docker compose --env-file .env.dev down -v
