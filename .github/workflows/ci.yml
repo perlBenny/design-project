@@ -95,6 +95,9 @@ jobs:
           echo "tips: $tips"
           [ "$tips" = "9" ]
 
+      - name: DB rules reject bad data
+        run: docker compose --env-file .env.dev run --rm --entrypoint psql seed -q -f /tests/constraints.sql
+
       - name: Logs on failure
         if: failure()
         run: docker compose --env-file .env.dev logs

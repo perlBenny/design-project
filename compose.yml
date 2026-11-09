@@ -70,7 +70,10 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-designer_dev}?sslmode=disable
+      # The password is NOT put in the URL: characters like # / @ ? would break it.
+      # The Postgres driver reads it from PGPASSWORD instead, so any password works.
+      DATABASE_URL: postgres://${POSTGRES_USER}@postgres:5432/${POSTGRES_DB:-designer_dev}?sslmode=disable
+      PGPASSWORD: ${POSTGRES_PASSWORD}
       DBMATE_MIGRATIONS_DIR: /db/migrations
       DBMATE_SCHEMA_FILE: /db/schema.sql
     volumes:
@@ -91,6 +94,7 @@ services:
       SEED_SAMPLE_DATA: ${SEED_SAMPLE_DATA:-false}
     volumes:
       - ./db/seed:/seed:ro
+      - ./db/tests:/tests:ro
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |

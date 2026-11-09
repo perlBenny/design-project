@@ -42,6 +42,7 @@ Backends never change it. `db/schema.sql` is generated — commit it, never edit
 | `pnpm db:status`        | Show which migrations ran                         |
 | `pnpm db:new add_thing` | Create a new empty migration file                 |
 | `pnpm db:seed`          | Load roles and permissions (+ sample data in dev) |
+| `pnpm db:test`          | Check that the DB rules reject bad data           |
 | `pnpm db:reset`         | Drop the dev database and rebuild it from scratch |
 
 ## Git workflow
