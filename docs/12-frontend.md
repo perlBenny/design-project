@@ -45,6 +45,21 @@ curl -s http://localhost:3000/ | grep -o '<h1>.*</h1>'   # → <h1>שלום</h1>
 
 If the text is in the raw HTML, the server rendered it. A client-only app would send an empty `<body>`.
 
+## SSR yes, RSC no
+
+- **SSR (we use it):** the server runs the whole page once and sends HTML. Then the same components
+  run again in the browser (hydration). Every component runs in both places.
+- **RSC (React Server Components, we don't use it):** some components run only on the server and send no
+  JavaScript. We have no `"use client"` / `"use server"` markers. The site is small, and SSR plus route
+  `loader`s already give SEO what it needs; RSC would add a server/client boundary to think about.
+
+**Who decides SSR?** Not the page code: the same `index.tsx` would work in a plain SPA. The `tanstackStart()`
+plugin in `vite.config.ts` builds a server that renders every request, and SSR is its default. A single route
+can opt out with `ssr: false` (maybe parts of `/admin` later).
+
+`declare module ... interface Register { ... }` blocks (in `routeTree.gen.ts`) are **types only**: they tell
+TypeScript which router and routes exist, so a link to a missing page is a compile error. They do not run.
+
 ## Next (planned, issue #8)
 
 Mantine with RTL, CSS Modules, a Hebrew font, the layout (header, footer, WhatsApp button)
