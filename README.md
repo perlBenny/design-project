@@ -14,7 +14,8 @@ Portfolio website for an interior designer (Hebrew, RTL, SEO-first).
 | `tests/e2e/`                       | Shared API E2E suite, runs against any backend via `API_URL`    |
 | `infra/caddy/`                     | Reverse proxy config for local prod                             |
 
-See [docs/SPEC.md](docs/SPEC.md) for the full specification.
+**New here? Read the [project book](docs/README.md).** It explains every part and every decision.
+The full specification is in [docs/SPEC.md](docs/SPEC.md).
 
 ## Requirements
 
