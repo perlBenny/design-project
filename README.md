@@ -36,15 +36,16 @@ pnpm dev          # starts Postgres + storage, runs migrations and seed
 The schema lives only in `db/migrations` (plain SQL, run by dbmate in Docker).
 Backends never change it. `db/schema.sql` is generated — commit it, never edit it.
 
-| Command                 | What it does                                      |
-| ----------------------- | ------------------------------------------------- |
-| `pnpm db:migrate`       | Apply new migrations and update `db/schema.sql`   |
-| `pnpm db:rollback`      | Undo the last migration                           |
-| `pnpm db:status`        | Show which migrations ran                         |
-| `pnpm db:new add_thing` | Create a new empty migration file                 |
-| `pnpm db:seed`          | Load roles and permissions (+ sample data in dev) |
-| `pnpm db:test`          | Check that the DB rules reject bad data           |
-| `pnpm db:reset`         | Drop the dev database and rebuild it from scratch |
+| Command                 | What it does                                                 |
+| ----------------------- | ------------------------------------------------------------ |
+| `pnpm db:migrate`       | Apply new migrations and update `db/schema.sql`              |
+| `pnpm db:rollback`      | Undo the last migration                                      |
+| `pnpm db:status`        | Show which migrations ran                                    |
+| `pnpm db:new add_thing` | Create a new empty migration file                            |
+| `pnpm db:seed`          | Load roles and permissions (+ sample data in dev)            |
+| `pnpm db:test`          | Check that the DB rules reject bad data                      |
+| `pnpm db:reset`         | Drop the dev database and rebuild it from scratch            |
+| `pnpm db:ui`            | Open pgAdmin at http://localhost:5050 (`db:ui:stop` to stop) |
 
 ## Git workflow
 

@@ -28,6 +28,7 @@ pnpm dev                   # starts Docker services, migrates, seeds
 | Storage API     | `http://localhost:9000`                       |
 | Storage console | `http://localhost:9001`                       |
 | DB rule tests   | `pnpm db:test` — every line should say `PASS` |
+| Browse the DB   | `pnpm db:ui`, then `http://localhost:5050`    |
 
 ## Daily commands
 

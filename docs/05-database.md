@@ -52,6 +52,22 @@ Seeds are **idempotent**: running them twice adds nothing. CI runs them twice to
 
 The first admin user is not seeded. It will be created by a backend command (planned, issue #6).
 
+## Browse the DB with pgAdmin
+
+```bash
+pnpm db:ui        # opens pgAdmin on http://localhost:5050
+pnpm db:ui:stop   # stop it
+```
+
+The dev DB (`designer-dev`) is already registered and signed in, using the user and password from `.env.dev`.
+Open **Servers → designer-dev → Databases → designer_dev → Schemas → public → Tables**,
+right-click a table → **View/Edit Data**. For SQL: **Tools → Query Tool**.
+
+- No pgAdmin login (desktop mode). That is safe only because it listens on `127.0.0.1`, never on the network.
+- First start takes ~20 seconds.
+- Look, query, try things. **Don't change the structure** (tables, columns) here: that goes through a
+  migration, or `db/schema.sql` and CI will disagree with your DB. `pnpm db:reset` fixes a broken dev DB.
+
 ## DB tests
 
 [`db/tests/constraints.sql`](../db/tests/constraints.sql) tries to insert bad data and expects an error.
