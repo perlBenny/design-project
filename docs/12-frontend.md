@@ -86,7 +86,8 @@ Rules for our CSS:
 - Use logical properties: `padding-inline-start`, not `padding-left`. "Start" is the right side in Hebrew.
   Only when that is not enough, use `@mixin rtl { ... }`.
 - Breakpoints: `@media (max-width: $mantine-breakpoint-sm)`, the same values as Mantine's.
-  (VS Code's CSS checker does not know `$` variables and may underline them. PostCSS handles them.)
+  (VS Code's plain-CSS checker reports `$` variables as "term expected". `.vscode/settings.json` opens `.css`
+  files as PostCSS instead; install the recommended **PostCSS Language Support** extension when VS Code asks.)
 
 ## Next (planned, issue #8)
 
