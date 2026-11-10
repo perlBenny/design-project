@@ -61,7 +61,7 @@ jobs:
         run: docker compose --env-file .env.dev up -d --wait
 
       - name: Postgres accepts queries
-        run: docker compose --env-file .env.dev exec -T postgres psql -U designer -d designer_dev -c "select 1"
+        run: docker compose --env-file .env.dev exec -T postgres psql -U admin -d designer_dev -c "select 1"
 
       - name: Bucket was created
         run: |
@@ -91,7 +91,7 @@ jobs:
         run: |
           docker compose --env-file .env.dev run --rm seed
           docker compose --env-file .env.dev run --rm seed
-          tips=$(docker compose --env-file .env.dev exec -T postgres psql -U designer -d designer_dev -tAc "select count(*) from tips")
+          tips=$(docker compose --env-file .env.dev exec -T postgres psql -U admin -d designer_dev -tAc "select count(*) from tips")
           echo "tips: $tips"
           [ "$tips" = "9" ]
 

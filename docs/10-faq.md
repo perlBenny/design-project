@@ -23,3 +23,6 @@ Add it in a migration, then add a test in `db/tests/constraints.sql` and run `pn
 
 **Where is the full spec?**
 [SPEC.md](SPEC.md).
+
+**What are the DB user and password?**
+In dev and CI: `admin` / `password` (from `.env.example`). Only for your machine and CI, never anywhere else.
