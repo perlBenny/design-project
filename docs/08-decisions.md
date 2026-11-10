@@ -49,3 +49,9 @@ Every choice has a cost. Each entry says what we chose, what else we considered,
 - **Chose:** Markdown in `docs/`, read on GitHub. **Considered:** VitePress, Starlight.
 - **Good at:** zero setup; lives next to the code; reviewed in the same PR.
 - **Falls short:** no search or custom design. Can move to a docs site later with the same files.
+
+## Trove for expert knowledge
+
+- **Chose:** [Trove](https://heytrove.ai) with a committed project shelf. **Considered:** no external knowledge, copying best practices into skills.
+- **Good at:** cited expert answers in every agent; the shelf is shared through git.
+- **Falls short:** paid external service, sign-in per developer, not used in CI. See [AI knowledge](11-ai-knowledge.md).

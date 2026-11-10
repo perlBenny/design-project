@@ -14,3 +14,10 @@ Read `docs/README.md` first, then `docs/SPEC.md` for the full spec.
 - Before pushing: `pnpm check` must pass.
 - Never load `.env*` files into the shell (`set -a`): Docker Compose prefers shell variables.
 - Never write secrets in code, docs or commit messages.
+
+## Expert knowledge (Trove)
+
+If Trove is installed (`trove` on PATH), before designing DB, auth/security, SEO, UI or reviewing a PR,
+search the Trove library; the books on `.trove/shelf.json` come first. Cite book and page in your answer.
+Our own rules (this file, `docs/`) win over a book; if they disagree, say so.
+See `docs/11-ai-knowledge.md`.

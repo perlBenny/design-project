@@ -1,0 +1,46 @@
+{
+  "shelf": "design-project",
+  "cloudId": "cmw9gyfgc3yvh0jqm9qf70al4",
+  "books": [
+    {
+      "id": "cmlmqhbci0052o10zudbna71s",
+      "title": "Supabase PostgreSQL Best Practices",
+      "author": null,
+      "why": "Postgres schema, indexes and constraints for db/migrations",
+      "topics": ["database", "postgres"],
+      "added": "2026-11-09"
+    },
+    {
+      "id": "cmmfdl2z503qep10zhi9dp1m4",
+      "title": "UI/UX Design Principles for AI Agents",
+      "author": null,
+      "why": "Public site and admin panel UI, accessibility",
+      "topics": ["frontend", "ux"],
+      "added": "2026-11-09"
+    },
+    {
+      "id": "cmmj33tuj00pumw01eqmthzdh",
+      "title": "Web Application Security for AI Agents",
+      "author": null,
+      "why": "JWT cookies, refresh rotation, RBAC, upload safety",
+      "topics": ["security", "auth"],
+      "added": "2026-11-09"
+    },
+    {
+      "id": "cmn0o20r901ccqo0znj3zzqh9",
+      "title": "Code Review for AI Agents",
+      "author": null,
+      "why": "Reviewing our PRs with the same checklist",
+      "topics": ["review", "quality"],
+      "added": "2026-11-09"
+    },
+    {
+      "id": "cmp2bdm7300j1qo0zdyrdn4am",
+      "title": "SEO for AI Agents",
+      "author": null,
+      "why": "SSR pages, meta tags, slugs, alt text: the main goal of the site",
+      "topics": ["seo", "frontend"],
+      "added": "2026-11-09"
+    }
+  ]
+}

@@ -8,19 +8,20 @@ This book explains **what** we built, **why** we chose each piece, and **what we
 
 ## Chapters
 
-| #   | Chapter                                  | You will learn                                                |
-| --- | ---------------------------------------- | ------------------------------------------------------------- |
-| 1   | [The project](01-the-project.md)         | What we build, for whom, and the goals                        |
-| 2   | [Architecture](02-architecture.md)       | The parts of the system and how they talk                     |
-| 3   | [Getting started](03-getting-started.md) | Run everything on your machine in a few minutes               |
-| 4   | [Repo tour](04-repo-tour.md)             | Every folder and config file, and why it exists               |
-| 5   | [Database](05-database.md)               | Tables, rules, migrations, seed and DB tests                  |
-| 6   | [Infra (Docker)](06-infra.md)            | Postgres and S3 storage in Docker Compose                     |
-| 7   | [CI and workflow](07-ci.md)              | GitHub checks, branches, PRs and the "book rule"              |
-| 8   | [Decisions](08-decisions.md)             | What we chose, what else we considered, good at / falls short |
-| 9   | [Lessons](09-lessons.md)                 | Things that broke and what they taught us                     |
-| 10  | [FAQ](10-faq.md)                         | Short answers to common questions                             |
-| —   | [Glossary](glossary.md)                  | Every term in one place                                       |
+| #   | Chapter                                    | You will learn                                                |
+| --- | ------------------------------------------ | ------------------------------------------------------------- |
+| 1   | [The project](01-the-project.md)           | What we build, for whom, and the goals                        |
+| 2   | [Architecture](02-architecture.md)         | The parts of the system and how they talk                     |
+| 3   | [Getting started](03-getting-started.md)   | Run everything on your machine in a few minutes               |
+| 4   | [Repo tour](04-repo-tour.md)               | Every folder and config file, and why it exists               |
+| 5   | [Database](05-database.md)                 | Tables, rules, migrations, seed and DB tests                  |
+| 6   | [Infra (Docker)](06-infra.md)              | Postgres and S3 storage in Docker Compose                     |
+| 7   | [CI and workflow](07-ci.md)                | GitHub checks, branches, PRs and the "book rule"              |
+| 8   | [Decisions](08-decisions.md)               | What we chose, what else we considered, good at / falls short |
+| 9   | [Lessons](09-lessons.md)                   | Things that broke and what they taught us                     |
+| 10  | [FAQ](10-faq.md)                           | Short answers to common questions                             |
+| 11  | [AI knowledge (Trove)](11-ai-knowledge.md) | Expert books our AI agents read, and how to use them          |
+| —   | [Glossary](glossary.md)                    | Every term in one place                                       |
 
 ## Status
 
