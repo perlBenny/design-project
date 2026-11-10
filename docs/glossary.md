@@ -24,3 +24,5 @@
 | UUID v7          | A unique ID that starts with a timestamp, so new IDs sort last                               |
 | Shelf            | A Trove list of books an agent reads first in one project (`.trove/shelf.json`)              |
 | Trove            | A library of expert books that AI agents read and cite. See [chapter 11](11-ai-knowledge.md) |
+| Hydration        | The browser takes server-rendered HTML and makes it interactive                              |
+| Route tree       | The list of pages, generated from files in `frontend/src/routes`                             |

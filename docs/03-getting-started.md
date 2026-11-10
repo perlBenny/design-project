@@ -32,12 +32,13 @@ pnpm dev                   # starts Docker services, migrates, seeds
 
 ## Daily commands
 
-| Command           | What it does                                                 |
-| ----------------- | ------------------------------------------------------------ |
-| `pnpm check`      | Lint, format check, typecheck, tests. Run before every push. |
-| `pnpm format`     | Fix formatting                                               |
-| `pnpm infra:down` | Stop Docker services (data is kept)                          |
-| `pnpm db:reset`   | Rebuild the dev DB from zero                                 |
+| Command                      | What it does                                                  |
+| ---------------------------- | ------------------------------------------------------------- |
+| `pnpm check`                 | Lint, format check, typecheck, tests. Run before every push.  |
+| `pnpm format`                | Fix formatting                                                |
+| `pnpm infra:down`            | Stop Docker services (data is kept)                           |
+| `pnpm db:reset`              | Rebuild the dev DB from zero                                  |
+| `pnpm --filter frontend dev` | Only the website, on http://localhost:3000 (no Docker needed) |
 
 ## Warning: don't load `.env` into the shell
 

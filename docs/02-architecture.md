@@ -14,7 +14,7 @@ Every arrow is a clear contract, so each part can be replaced alone.
 
 | Part          | Tech                                           | Status  |
 | ------------- | ---------------------------------------------- | ------- |
-| Frontend      | React 19, TanStack Start, Mantine, CSS Modules | Planned |
+| Frontend      | React 19, TanStack Start, Mantine, CSS Modules | Started |
 | API contract  | OpenAPI (`api-spec/openapi.yaml`)              | Planned |
 | Main backend  | Node, Fastify, Prisma, zod                     | Planned |
 | More backends | Go, Python (same contract)                     | Planned |
