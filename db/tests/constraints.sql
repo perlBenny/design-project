@@ -98,5 +98,40 @@ begin
   raise notice 'PASS  ids are UUID v7';
 end $$;
 
+-- Every foreign key column is the first column of some index.
+-- Source: Supabase PostgreSQL Best Practices, p. 6 ("Index Foreign Key Columns").
+do $$
+declare
+  missing text;
+begin
+  select string_agg(c.conrelid::regclass || '.' || a.attname, ', ') into missing
+  from pg_constraint c
+  join pg_attribute a on a.attrelid = c.conrelid and a.attnum = c.conkey[1]
+  where c.contype = 'f'
+    and not exists (
+      select 1 from pg_index i where i.indrelid = c.conrelid and i.indkey[0] = c.conkey[1]
+    );
+  if missing is not null then
+    raise exception 'FAIL  foreign keys without an index: %', missing;
+  end if;
+  raise notice 'PASS  every foreign key has an index';
+end $$;
+
+-- Data types: timestamptz (not timestamp), text (not varchar). dbmate's own table is skipped.
+-- Source: Supabase PostgreSQL Best Practices, p. 6 ("Choose Appropriate Data Types").
+do $$
+declare
+  bad text;
+begin
+  select string_agg(table_name || '.' || column_name || ' ' || data_type, ', ') into bad
+  from information_schema.columns
+  where table_schema = 'public' and table_name <> 'schema_migrations'
+    and data_type in ('timestamp without time zone', 'character varying', 'character', 'real', 'double precision');
+  if bad is not null then
+    raise exception 'FAIL  columns with a discouraged type: %', bad;
+  end if;
+  raise notice 'PASS  column types follow the guidelines';
+end $$;
+
 rollback;
 \echo 'All DB rule tests passed.'

@@ -51,3 +51,10 @@ Things that broke, how we found them, and what we changed. This is the part nobo
 - **What happened:** a GitHub token was stored in plain text in `~/.bashrc` and showed up in terminal output.
 - **Fix:** removed it from the file, revoke it on GitHub, and use `gh auth login` (system keyring) instead.
 - **Lesson:** secrets go in a keyring or a secret store, never in files that are printed or committed.
+
+## The book found what our review missed
+
+- **What happened:** we checked the schema against a Postgres best-practices book. `refresh_tokens.replaced_by`
+  is a foreign key with no index. Postgres does not index foreign keys for you, so a delete would scan the table.
+- **Fix:** a new migration adds the index, and a DB test now fails if any foreign key has no index.
+- **Lesson:** turn a book rule into a test. A rule only in a document is forgotten; a test is not.

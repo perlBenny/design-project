@@ -62,3 +62,20 @@ pnpm db:test
 ```
 
 **Rule:** a new DB rule needs a new test here.
+
+## Checked against the book
+
+We checked the schema against _Supabase PostgreSQL Best Practices_ (Trove shelf, see [AI knowledge](11-ai-knowledge.md)).
+Rules that can be checked by a machine are now DB tests, so they stay true.
+
+| Rule (book, page)                                   | Status                                                                                                        |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| UUID v7, not random v4, for exposed IDs (p. 6)      | OK. Test: `ids are UUID v7`                                                                                   |
+| `timestamptz`, `text`, no `varchar`/float (p. 6)    | OK. Test: `column types follow the guidelines`                                                                |
+| Index every foreign key column (p. 6)               | **Was missing** on `refresh_tokens.replaced_by`. Fixed by a migration. Test: `every foreign key has an index` |
+| Index columns used in `where` / `order by` (p. 2)   | OK. Composite indexes for list pages (`status, published_at`)                                                 |
+| Partial indexes for filtered rules (p. 2)           | OK. One cover image per project                                                                               |
+| Lower-case identifiers (p. 6)                       | OK                                                                                                            |
+| Least privilege: the app is not the DB owner (p. 5) | **Planned** (backend phase): a separate app role with only the grants it needs                                |
+| Row Level Security (p. 5)                           | Not needed: no multi-tenant data. Access is checked by RBAC in the API                                        |
+| Pooling, pagination, `EXPLAIN` (p. 3, 8, 9)         | **Planned**: these are about queries, checked when the backend is built                                       |
