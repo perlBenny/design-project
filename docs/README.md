@@ -21,19 +21,20 @@ This book explains **what** we built, **why** we chose each piece, and **what we
 | 9   | [Lessons](09-lessons.md)                   | Things that broke and what they taught us                     |
 | 10  | [FAQ](10-faq.md)                           | Short answers to common questions                             |
 | 11  | [AI knowledge (Trove)](11-ai-knowledge.md) | Expert books our AI agents read, and how to use them          |
+| 12  | [Frontend](12-frontend.md)                 | How the website is built and how a page is rendered           |
 | —   | [Glossary](glossary.md)                    | Every term in one place                                       |
 
 ## Status
 
-| Part                  | Status      |
-| --------------------- | ----------- |
-| Repo, tooling, Docker | Done        |
-| CI                    | Done        |
-| Database              | Done        |
-| API spec (OpenAPI)    | **Planned** |
-| Node backend          | **Planned** |
-| Frontend              | **Planned** |
-| E2E tests, local prod | **Planned** |
+| Part                  | Status                   |
+| --------------------- | ------------------------ |
+| Repo, tooling, Docker | Done                     |
+| CI                    | Done                     |
+| Database              | Done                     |
+| API spec (OpenAPI)    | **Planned**              |
+| Node backend          | **Planned**              |
+| Frontend              | **Started** (hello page) |
+| E2E tests, local prod | **Planned**              |
 
 ## How this book stays true
 
