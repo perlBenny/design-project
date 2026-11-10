@@ -107,6 +107,43 @@ services:
           echo "sample data done"
         fi
 
+  # ---------- pgAdmin: web UI to browse the dev DB. Usage: pnpm db:ui ----------
+  # Profile "ui": not started by `infra:up`. Desktop mode = no pgAdmin login,
+  # so it listens on 127.0.0.1 only (not reachable from other machines).
+  pgadmin:
+    image: dpage/pgadmin4:9.19
+    profiles: [ui]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dev@example.com
+      PGADMIN_DEFAULT_PASSWORD: unused-in-desktop-mode
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_SERVER_JSON_FILE: /tmp/servers.json
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB:-designer_dev}
+    # Register the dev DB on start, with the password from .env.dev in a pgpass file.
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        printf 'postgres:5432:*:%s:%s\n' "$$DB_USER" "$$DB_PASSWORD" > /tmp/pgpass
+        chmod 600 /tmp/pgpass
+        cat > /tmp/servers.json <<EOF
+        {"Servers": {"1": {"Name": "designer-dev", "Group": "Servers",
+          "Host": "postgres", "Port": 5432, "MaintenanceDB": "$$DB_NAME",
+          "Username": "$$DB_USER", "PassFile": "/tmp/pgpass", "SSLMode": "disable"}}}
+        EOF
+        exec /entrypoint.sh
+    ports:
+      - "127.0.0.1:${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmindata:/var/lib/pgadmin
+
 volumes:
   pgdata:
   storagedata:
+  pgadmindata:

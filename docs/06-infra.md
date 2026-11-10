@@ -7,13 +7,14 @@ All services are in [`compose.yml`](../compose.yml) and read settings from `.env
 
 ## Services
 
-| Service        | Image           | Job                                                          |
-| -------------- | --------------- | ------------------------------------------------------------ |
-| `postgres`     | Postgres 18     | The database. Data is kept in the `pgdata` volume            |
-| `storage`      | RustFS          | S3-compatible file storage for images (ports 9000, 9001)     |
-| `storage-init` | aws-cli         | Runs once: creates the `designer-images` bucket, public read |
-| `dbmate`       | dbmate          | Migrations. Profile `tools`: runs only when called           |
-| `seed`         | Postgres (psql) | Loads seed files and runs DB tests. Profile `tools`          |
+| Service        | Image           | Job                                                             |
+| -------------- | --------------- | --------------------------------------------------------------- |
+| `postgres`     | Postgres 18     | The database. Data is kept in the `pgdata` volume               |
+| `storage`      | RustFS          | S3-compatible file storage for images (ports 9000, 9001)        |
+| `storage-init` | aws-cli         | Runs once: creates the `designer-images` bucket, public read    |
+| `dbmate`       | dbmate          | Migrations. Profile `tools`: runs only when called              |
+| `seed`         | Postgres (psql) | Loads seed files and runs DB tests. Profile `tools`             |
+| `pgadmin`      | pgAdmin 4       | Web UI for the DB, `localhost:5050`. Profile `ui`: `pnpm db:ui` |
 
 ## Health checks
 
