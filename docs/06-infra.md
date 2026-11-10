@@ -30,3 +30,19 @@ so the code will work with AWS S3 or any S3 service later without changes.
 
 The `dbmate` service gets the password in `PGPASSWORD`, not inside `DATABASE_URL`.
 A password with `#`, `/` or `@` breaks a URL. See [Lessons](09-lessons.md).
+
+## Where the DB user comes from
+
+No SQL of ours creates the Postgres user. The official image creates it on the **first** start,
+from `POSTGRES_USER` / `POSTGRES_PASSWORD` (dev and CI: `admin` / `password`). It is a superuser and owns the DB.
+
+On later starts the image does nothing, because the `pgdata` volume already has data.
+So changing these values in `.env.dev` does **not** change an existing DB. To apply them, rebuild:
+
+```bash
+docker compose --env-file .env.dev down -v   # deletes all local dev data
+pnpm dev                                     # creates the DB, migrates, seeds
+```
+
+The backend will get its own limited user later (least privilege), created in a migration.
+See [Postgres image: environment variables](https://hub.docker.com/_/postgres).
