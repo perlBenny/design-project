@@ -1,0 +1,11 @@
+/* CSS Module: class names are local to this file (no clashes between pages). */
+.hero {
+  padding-block: var(--mantine-spacing-xl);
+  /* Logical property: "start" is the right side in RTL, the left side in LTR. */
+  border-inline-start: 4px solid var(--mantine-color-dark-6);
+  padding-inline-start: var(--mantine-spacing-md);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    padding-block: var(--mantine-spacing-md);
+  }
+}

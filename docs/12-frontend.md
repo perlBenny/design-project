@@ -2,8 +2,9 @@
 
 ## What exists now
 
-One page, `/`, that says **שלום**. It is small on purpose: it proves the whole chain works
-(server rendering, Hebrew, right to left, build, CI) before we add design and content.
+One page, `/`, with a title (**שלום**), a line of text and two buttons, built with Mantine.
+It is small on purpose: it proves the whole chain works (server rendering, Hebrew, right to left,
+the component library, CSS Modules, build, CI) before we add the real design and content.
 
 ```bash
 pnpm --filter frontend dev     # http://localhost:3000
@@ -19,13 +20,16 @@ Routing is type-safe: a wrong link is a TypeScript error, not a 404.
 
 ## The files
 
-| File                    | Job                                                                                       |
-| ----------------------- | ----------------------------------------------------------------------------------------- |
-| `vite.config.ts`        | Build tool. The Start plugin must come before the React plugin                            |
-| `src/router.tsx`        | Creates the router. Start calls it once per request on the server and once in the browser |
-| `src/routes/__root.tsx` | The HTML shell of every page: `<html lang="he" dir="rtl">`, `<head>`, scripts             |
-| `src/routes/index.tsx`  | The home page                                                                             |
-| `src/routeTree.gen.ts`  | **Generated** from the files in `src/routes`. Committed so typecheck works; never edit it |
+| File                          | Job                                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------- |
+| `vite.config.ts`              | Build tool. The Start plugin must come before the React plugin                            |
+| `src/router.tsx`              | Creates the router. Start calls it once per request on the server and once in the browser |
+| `src/routes/__root.tsx`       | The HTML shell of every page: `<html lang="he" dir="rtl">`, `<head>`, scripts             |
+| `src/routes/index.tsx`        | The home page                                                                             |
+| `src/routes/index.module.css` | Styles for the home page only (CSS Module)                                                |
+| `src/theme.ts`                | Mantine theme: colors, font, radius. Placeholder until the design                         |
+| `postcss.config.mjs`          | CSS tooling: Mantine mixins and breakpoint variables                                      |
+| `src/routeTree.gen.ts`        | **Generated** from the files in `src/routes`. Committed so typecheck works; never edit it |
 
 ## Routes are files
 
@@ -40,7 +44,7 @@ Both are set once in `__root.tsx`, so every page gets them.
 ## Check it is really server-rendered
 
 ```bash
-curl -s http://localhost:3000/ | grep -o '<h1>.*</h1>'   # → <h1>שלום</h1>
+curl -s http://localhost:3000/ | grep -o '<h1[^>]*>[^<]*</h1>'   # → <h1 ... class="... mantine-Title-root">שלום</h1>
 ```
 
 If the text is in the raw HTML, the server rendered it. A client-only app would send an empty `<body>`.
@@ -60,7 +64,32 @@ can opt out with `ssr: false` (maybe parts of `/admin` later).
 `declare module ... interface Register { ... }` blocks (in `routeTree.gen.ts`) are **types only**: they tell
 TypeScript which router and routes exist, so a link to a missing page is a compile error. They do not run.
 
+## Mantine (components) and CSS Modules (our styles)
+
+[Mantine](https://mantine.dev) gives us ready, accessible components: `Button`, `Title`, `Container`, inputs,
+modals. Every component supports right to left. We write our own styles in **CSS Modules**: a file
+`name.module.css` next to the component. Class names become unique (`hero` → `_hero_1xs0i_2`), so two pages
+can both have a `.hero` without clashing.
+
+How it is wired in `__root.tsx`, and why:
+
+| Piece                                      | Why                                                                                                               |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `styles.css?url` in `head.links`           | The CSS is a `<link>` in the server HTML, so the page is styled on the first paint (no flash of unstyled content) |
+| `MantineProvider theme={theme}`            | Gives every component our theme                                                                                   |
+| `DirectionProvider initialDirection="rtl"` | Mantine renders RTL already on the server. Without it, it would render LTR and flip after load                    |
+| `ColorSchemeScript` + `mantineHtmlProps`   | Sets the light color scheme before paint, with the same attribute on server and browser                           |
+
+Rules for our CSS:
+
+- Use Mantine variables, not raw values: `var(--mantine-spacing-md)`, `var(--mantine-color-dark-6)`.
+- Use logical properties: `padding-inline-start`, not `padding-left`. "Start" is the right side in Hebrew.
+  Only when that is not enough, use `@mixin rtl { ... }`.
+- Breakpoints: `@media (max-width: $mantine-breakpoint-sm)`, the same values as Mantine's.
+  (VS Code's plain-CSS checker reports `$` variables as "term expected". `.vscode/settings.json` opens `.css`
+  files as PostCSS instead; install the recommended **PostCSS Language Support** extension when VS Code asks.)
+
 ## Next (planned, issue #8)
 
-Mantine with RTL, CSS Modules, a Hebrew font, the layout (header, footer, WhatsApp button)
+A Hebrew font, the layout (header, footer, WhatsApp button), a 404 page,
 and a typed API client generated from `api-spec/openapi.yaml`.

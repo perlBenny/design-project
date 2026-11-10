@@ -71,3 +71,10 @@ Things that broke, how we found them, and what we changed. This is the part nobo
 - **Why:** pnpm waits before it trusts a new release. Many supply-chain attacks are hijacked releases caught within hours.
 - **Fix:** we did not weaken the rule. We allowed `^8.3.0` and let pnpm pick 8.3.6, which is old enough.
 - **Lesson:** if a tool tries to switch off a safety check for you, read the diff before you commit it.
+
+## VS Code flagged valid CSS
+
+- **What happened:** `@media (max-width: $mantine-breakpoint-sm)` showed "term expected" in VS Code, but the build was fine.
+- **Why:** VS Code checked the file as plain CSS. `$variables` are a PostCSS feature.
+- **Fix:** `.vscode/settings.json` opens `.css` as PostCSS, and `.vscode/extensions.json` recommends the PostCSS extension.
+- **Lesson:** an editor error is not a build error. Check `pnpm build` before changing working code.

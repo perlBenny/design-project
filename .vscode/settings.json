@@ -1,0 +1,7 @@
+{
+  // Our CSS is processed by PostCSS (Mantine mixins, $breakpoint variables).
+  // Plain-CSS validation reports those as errors, so open .css files as PostCSS.
+  "files.associations": {
+    "*.css": "postcss"
+  }
+}
